@@ -1,0 +1,49 @@
+#include<LiquidCrystal.h>
+LiquidCrystal lcd(12, 11, 5, 3, 2, 6);
+#define USE_ARDUINO_INTERRUPTS true
+#include <PulseSensorPlayground.h>
+const int PULSE_SENSOR_PIN = A0;  // Analog PIN where the PulseSensor is connected
+const int THRESHOLD = 550;       // Threshold for detecting a heartbeat
+PulseSensorPlayground pulseSensor;
+int ard1 = 10;
+
+void setup() 
+{
+  Serial.begin(9600);
+  pinMode(ard1, INPUT);
+  lcd.begin(16, 2); 
+  pulseSensor.analogInput(PULSE_SENSOR_PIN);
+  pulseSensor.setThreshold(THRESHOLD);
+  if (pulseSensor.begin()) 
+  {
+    Serial.println("PulseSensor object created successfully!");
+  }
+}
+ 
+void loop() 
+{
+  int ard1_State = digitalRead(ard1);
+  int currentBPM = pulseSensor.getBeatsPerMinute();
+  if (ard1_State == 1){
+    lcd.setCursor(0,0); 
+    lcd.print("EARTHQUACK IS"); 
+    lcd.setCursor(2,1);           
+    lcd.print("DETECTED!");
+    delay(3000);
+    lcd.clear();
+    if (pulseSensor.sawStartOfBeat()) 
+    {
+      lcd.setCursor(0,0); 
+      lcd.print("A HB Happened!");
+      delay(3000);
+      lcd.clear(); 
+      lcd.setCursor(0,0);           
+      lcd.print("BPM: ");
+      lcd.setCursor(2,1);  
+      lcd.print(currentBPM);
+      delay(3000);
+      lcd.clear();
+    }
+  delay(2000);
+  }
+}
