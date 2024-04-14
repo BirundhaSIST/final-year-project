@@ -49,7 +49,7 @@ lcd.clear();
 }
 int ard1_State = digitalRead(ard1);
 if (bru == 0){
-if (ard1_State == 1){
+if (ard1_State == HIGH){
 lcd.setCursor(0,0); 
 lcd.print("EARTHQUACK IS"); 
 lcd.setCursor(2,1);           
